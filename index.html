@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f2">
+  <title>AskWithoutFear — learn together</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202d29;
+      --muted: #718079;
+      --green: #355d4b;
+      --green-dark: #294b3c;
+      --mint: #e9f1e9;
+      --paper: #fffefa;
+      --line: #e9ebe3;
+      --peach: #f8eee5;
+      --shadow: 0 18px 48px rgba(44, 63, 51, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8f2;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
+    header {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(44, 63, 51, .08);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: -.04em; font-size: 19px; }
+    .brand-mark { display: grid; place-items: center; height: 36px; width: 36px; background: var(--green); color: white; border-radius: 13px; font-size: 19px; }
+    nav { display: flex; align-items: center; gap: 29px; font-size: 13px; color: #56655d; font-weight: 550; }
+    nav a:hover { color: var(--green); }
+    .header-cta, .primary {
+      border: 0; border-radius: 999px; background: var(--green); color: white;
+      font-weight: 650; padding: 11px 18px; transition: background .2s, transform .2s;
+    }
+    .header-cta:hover, .primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .hero { display: grid; grid-template-columns: 1.12fr .88fr; gap: 54px; align-items: center; padding: 66px 0 57px; }
+    .eyebrow { color: #547462; font-size: 12px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(43px, 5.5vw, 66px); line-height: 1.06; letter-spacing: -.045em; font-weight: 500; margin: 15px 0 19px; max-width: 610px; }
+    h1 em { color: #5e8068; font-weight: 500; }
+    .hero-copy { max-width: 500px; color: #6a7770; font-size: 16px; line-height: 1.75; margin: 0 0 25px; }
+    .hero-actions { display: flex; align-items: center; gap: 18px; }
+    .primary { display: inline-flex; gap: 9px; align-items: center; padding: 13px 20px; }
+    .text-link { font-size: 13px; font-weight: 650; color: #456552; }
+    .text-link:hover { text-decoration: underline; }
+    .trust-line { display: flex; align-items: center; gap: 9px; margin-top: 28px; color: #78847d; font-size: 12px; }
+    .trust-icon { background: #e7eee5; color: #547462; border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; }
+    .feature-card { background: #e9efe6; border-radius: 26px; padding: 27px; position: relative; overflow: hidden; min-height: 310px; }
+    .feature-card:after { content: "✳"; position: absolute; right: 19px; top: 7px; color: rgba(84,116,98,.13); font-size: 130px; line-height: 1; }
+    .feature-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    .feature-label { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.72); color: #476451; border-radius: 99px; padding: 7px 11px; font-size: 11px; font-weight: 700; }
+    .feature-date { color: #738078; font-size: 11px; }
+    .feature-card h2 { font-family: Georgia, serif; font-size: 26px; font-weight: 500; line-height: 1.27; letter-spacing: -.025em; max-width: 380px; margin: 27px 0 18px; position: relative; z-index: 1; }
+    .featured-reply { color: #68776e; font-size: 13px; max-width: 390px; margin: 0; position: relative; z-index: 1; }
+    .featured-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 26px; position: relative; z-index: 1; }
+    .support-button { background: white; color: #496852; border: 1px solid #dbe5d9; padding: 9px 13px; border-radius: 999px; font-size: 12px; font-weight: 650; }
+    .support-button:hover, .support-button.active { background: #dcebdd; }
+    .response-link { font-size: 12px; font-weight: 650; color: #486751; }
+    main { padding-bottom: 72px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 8px 0 19px; }
+    .section-heading h2 { font: 500 30px/1.15 Georgia, serif; letter-spacing: -.025em; margin: 5px 0 0; }
+    .section-heading p { color: var(--muted); font-size: 13px; margin: 7px 0 0; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .75fr); gap: 21px; align-items: start; }
+    .panel { background: var(--paper); border: 1px solid rgba(56,76,61,.08); border-radius: 19px; box-shadow: 0 8px 26px rgba(44,63,51,.035); }
+    .composer { padding: 23px; }
+    .panel-title { font-size: 15px; font-weight: 750; margin: 0; letter-spacing: -.01em; }
+    .panel-subtitle { font-size: 12px; color: var(--muted); margin: 5px 0 16px; }
+    .reminder { background: #f1f5eb; border: 1px solid #e4ecdc; border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; color: #5b705f; font-size: 12px; margin: 0 0 15px; }
+    .reminder strong { display: block; color: #405e49; margin-bottom: 2px; font-size: 12px; }
+    textarea, input[type="text"], input[type="search"], select {
+      width: 100%; border: 1px solid #e4e8df; border-radius: 11px; background: #fff; padding: 12px 13px; outline: none; color: var(--ink);
+    }
+    textarea { min-height: 105px; resize: vertical; font-size: 13px; }
+    textarea::placeholder, input::placeholder { color: #a1aaa3; }
+    textarea:focus, input:focus, select:focus { border-color: #9db59e; box-shadow: 0 0 0 3px rgba(91,128,104,.1); }
+    .form-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .visibility { display: flex; align-items: center; gap: 9px; color: #58675e; font-size: 12px; }
+    .visibility select { width: auto; min-width: 148px; padding: 9px 30px 9px 10px; font-size: 12px; }
+    .name-input { max-width: 175px; padding: 9px 10px !important; font-size: 12px; }
+    .spacer { flex: 1; }
+    .secondary { border: 1px solid #dce4db; background: white; color: #476451; border-radius: 999px; padding: 10px 14px; font-size: 12px; font-weight: 650; }
+    .secondary:hover { background: #f2f6ef; }
+    .primary.small { padding: 10px 15px; font-size: 12px; }
+    .explain-options { border-top: 1px solid #f0f1eb; margin-top: 17px; padding-top: 13px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .explain-options span { font-size: 11px; color: #7a867e; margin-right: 2px; }
+    .chip { border: 1px solid #e5e9e1; background: white; color: #637168; border-radius: 99px; padding: 6px 10px; font-size: 11px; }
+    .chip.selected { background: #e9f1e9; border-color: #d5e3d5; color: #42604b; }
+    .side-stack { display: grid; gap: 15px; }
+    .mini-card { padding: 19px; }
+    .mini-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 13px; }
+    .mini-head h3 { margin: 0; font-size: 14px; letter-spacing: -.01em; }
+    .mini-head a { color: #547460; font-size: 11px; font-weight: 650; }
+    .buddy-card { background: #f8f2e9; border: 1px solid #f1e9dd; border-radius: 13px; padding: 13px; }
+    .buddy-card p { color: #68746d; font-size: 12px; margin: 0 0 11px; }
+    .buddy-card .primary { padding: 8px 12px; font-size: 11px; }
+    .buddy-foot { display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #858b82; margin-top: 9px; }
+    .avatar-row { display: flex; align-items: center; gap: 5px; }
+    .avatar { width: 21px; height: 21px; display: grid; place-items: center; background: #d9e6d8; border-radius: 50%; font-size: 10px; }
+    .library-search { position: relative; }
+    .library-search input { padding: 10px 12px 10px 34px; font-size: 12px; }
+    .search-icon { position: absolute; left: 11px; top: 9px; color: #879189; font-size: 13px; }
+    .library-list { display: grid; gap: 9px; margin-top: 12px; }
+    .library-item { background: #fbfcf8; border: 1px solid #eef0e9; padding: 10px 11px; border-radius: 11px; }
+    .library-item strong { font-size: 11px; line-height: 1.4; font-weight: 650; display: block; }
+    .library-item small { display: block; color: #89948b; font-size: 10px; margin-top: 4px; }
+    .questions-area { margin-top: 46px; }
+    .question-tools { display: flex; align-items: center; gap: 9px; }
+    .question-tools select { width: auto; font-size: 12px; padding: 9px 28px 9px 10px; }
+    .question-list { display: grid; gap: 12px; }
+    .question-card { padding: 18px 20px; }
+    .question-meta { display: flex; align-items: center; gap: 8px; color: #8a958c; font-size: 10px; }
+    .subject-tag { background: #edf3eb; color: #58725c; border-radius: 99px; padding: 4px 8px; font-weight: 650; }
+    .question-card h3 { font-family: Georgia, serif; font-size: 19px; line-height: 1.35; font-weight: 500; margin: 11px 0 8px; letter-spacing: -.015em; }
+    .question-card .question-body { color: #758078; font-size: 12px; margin: 0; }
+    .answer { border-left: 2px solid #bfd1bd; margin: 13px 0 2px; padding: 2px 0 2px 12px; color: #5e6e62; font-size: 12px; line-height: 1.6; }
+    .answer-form { margin-top: 12px; padding: 12px; background: #f8faf5; border: 1px solid #e9eee4; border-radius: 11px; }
+    .answer-form textarea { min-height: 76px; font-size: 12px; }
+    .answer-form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+    .question-actions { border-top: 1px solid #f0f1ec; margin-top: 14px; padding-top: 11px; display: flex; align-items: center; gap: 10px; }
+    .question-actions button { border: 0; background: transparent; color: #66766a; font-size: 11px; padding: 5px 7px; border-radius: 7px; }
+    .question-actions button:hover { background: #f2f6ef; color: #416149; }
+    .question-actions button.active { color: #4b7555; background: #edf4ec; }
+    .question-actions .save-action { margin-left: auto; }
+    .tracker-select { border: 1px solid #e5e9e1 !important; border-radius: 99px !important; padding: 6px 10px !important; font-size: 10px !important; background: #fff !important; }
+    .empty-state { text-align: center; padding: 28px; color: #839087; font-size: 13px; }
+    .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 42px; }
+    .insight-panel { padding: 22px; }
+    .insight-panel .panel-subtitle { margin-bottom: 14px; }
+    .insight-form { display: grid; gap: 12px; }
+    .insight-form label { display: block; font-size: 11px; font-weight: 650; color: #58675e; margin-bottom: 6px; }
+    .insight-form select, .insight-form input { font-size: 12px; }
+    .insight-form .primary { justify-self: start; }
+    .recommendation { display: none; margin-top: 13px; padding: 13px; border-radius: 12px; background: #f1f5eb; color: #5b705f; font-size: 12px; }
+    .recommendation.visible { display: block; }
+    .recommendation strong { display: block; color: #405e49; margin-bottom: 4px; }
+    .map-note { color: #89938b; font-size: 10px; margin: 0 0 12px; }
+    .map-list { display: grid; gap: 10px; }
+    .map-topic { border: 1px solid #eef0e9; border-radius: 11px; padding: 11px; }
+    .map-topic h4 { font-size: 12px; margin: 0 0 8px; }
+    .map-row { display: grid; grid-template-columns: minmax(120px, 1fr) auto; gap: 8px; align-items: center; font-size: 10px; color: #657269; margin-top: 6px; }
+    .map-bar { grid-column: 1 / -1; background: #edf0e9; height: 5px; border-radius: 99px; overflow: hidden; }
+    .map-bar span { display: block; height: 100%; border-radius: inherit; background: #83a18a; }
+    .map-empty { background: #fbfcf8; border: 1px dashed #e3e8df; border-radius: 11px; padding: 15px; text-align: center; color: #839087; font-size: 11px; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(26,39,31,.38); z-index: 5; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(440px, 100%); background: var(--paper); border-radius: 19px; padding: 25px; box-shadow: 0 24px 70px rgba(0,0,0,.2); }
+    .modal h2 { font: 500 25px Georgia, serif; margin: 0 0 8px; }
+    .modal p { font-size: 13px; color: #718078; margin: 0 0 17px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 17px; }
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: #2d4b3b; color: white; padding: 11px 16px; border-radius: 99px; font-size: 12px; box-shadow: var(--shadow); transition: .25s; pointer-events: none; z-index: 8; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    footer { border-top: 1px solid var(--line); padding: 22px 0 30px; color: #869087; font-size: 11px; display: flex; justify-content: space-between; gap: 15px; }
+    footer strong { color: #526b58; font-weight: 650; }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 47px; }
+      .feature-card { min-height: 0; }
+      .workspace { grid-template-columns: 1fr; }
+      .side-stack { grid-template-columns: 1fr 1fr; }
+      .insight-grid { grid-template-columns: 1fr; }
+      nav { gap: 15px; }
+    }
+    @media (max-width: 600px) {
+      .shell { width: min(100% - 30px, 500px); }
+      header { height: 68px; }
+      nav a:not(.header-cta) { display: none; }
+      .header-cta { padding: 9px 12px; font-size: 11px; }
+      .hero { padding: 37px 0 39px; }
+      h1 { font-size: 45px; }
+      .feature-card { padding: 21px; }
+      .side-stack { grid-template-columns: 1fr; }
+      .composer { padding: 17px; }
+      .form-row { gap: 9px; }
+      .visibility { width: 100%; }
+      .visibility select { flex: 1; }
+      .name-input { flex: 1; max-width: none; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .question-tools { width: 100%; }
+      .question-tools select { flex: 1; }
+      .question-card { padding: 15px; }
+      .tracker-select { max-width: 145px; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <a class="brand" href="#" aria-label="AskWithoutFear home">
+      <span class="brand-mark">✳</span><span>AskWithoutFear</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#ask">Ask a doubt</a>
+      <a href="#library">Doubt library</a>
+      <a href="#community">Our community</a>
+      <a href="#confusion-map">Class confusion map</a>
+      <a class="header-cta" href="#ask">Ask safely <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <div class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">A little more room to wonder</div>
+        <h1>It's okay not to know.<br>It's okay to <em>ask.</em></h1>
+        <p class="hero-copy">A kind corner of the internet where you can ask the questions on your mind, find people who get it, and learn at your own pace.</p>
+        <div class="hero-actions">
+          <a class="primary" href="#ask">Ask your question <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="#community">Explore the community ↓</a>
+        </div>
+        <div class="trust-line"><span class="trust-icon">♡</span> No judgment here. Just learning, together.</div>
+      </div>
+      <article class="feature-card" id="featured">
+        <div class="feature-top">
+          <span class="feature-label">💚 The doubt we share</span>
+          <span class="feature-date">A question from our community</span>
+        </div>
+        <h2>“How do I know which formula to use in a word problem?”</h2>
+        <p class="featured-reply">Start by asking what the problem wants you to find. Then list what you already know. The right formula usually connects those two things — and it's completely okay if it takes a few tries.</p>
+        <div class="featured-footer">
+          <button class="support-button" id="featuredSupport">♡ I've had this doubt too! <span id="featuredCount">24</span></button>
+          <a class="response-link" href="#community">Read 6 helpful responses →</a>
+        </div>
+      </article>
+    </section>
+
+    <main>
+      <section id="ask">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Your question belongs here</div>
+            <h2>What's on your mind?</h2>
+            <p>Ask in your own words. There are no silly questions.</p>
+          </div>
+        </div>
+        <div class="workspace">
+          <form class="panel composer" id="questionForm">
+            <h3 class="panel-title">Ask the community</h3>
+            <p class="panel-subtitle">Share what's confusing you. We'll figure it out together.</p>
+            <div class="reminder"><span aria-hidden="true">🌿</span><div><strong>No judgment, ever.</strong>Questions are how learning begins. Your classmates are here to help, not judge.</div></div>
+            <label for="questionText" class="panel-subtitle">Your question</label>
+            <textarea id="questionText" maxlength="500" placeholder="It's okay to start with “I don't understand...”"></textarea>
+            <div class="form-row">
+              <label class="visibility" for="identitySelect">Post as
+                <select id="identitySelect">
+                  <option value="Anonymous">🎭 Anonymous</option>
+                  <option value="named">My name</option>
+                </select>
+              </label>
+              <input class="name-input" id="displayName" type="text" maxlength="40" placeholder="Your displayed name" hidden>
+              <span class="spacer"></span>
+              <button class="primary small" type="submit">Share my doubt <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="explain-options" aria-label="Explanation preferences">
+              <span>I'd love an explanation with</span>
+              <button type="button" class="chip selected" data-style="simple">🧠 Simple words</button>
+              <button type="button" class="chip" data-style="example">🌱 An example</button>
+              <button type="button" class="chip" data-style="steps">🪜 Step by step</button>
+              <button type="button" class="chip" data-style="analogy">💡 An analogy</button>
+            </div>
+          </form>
+
+          <aside class="side-stack">
+            <section class="panel mini-card" id="community">
+              <div class="mini-head"><h3>🤝 Find someone who gets it</h3><a href="#" id="buddyLearnMore">How it works</a></div>
+              <div class="buddy-card">
+                <p>Need a little extra help? Find a classmate who's happy to explain a tricky topic, one-on-one.</p>
+                <button class="primary" id="buddyButton">Find a study buddy ↗</button>
+                <div class="buddy-foot"><span class="avatar-row"><span class="avatar">🌼</span><span class="avatar">📚</span><span class="avatar">☀️</span></span><span>Kind classmates are here</span></div>
+              </div>
+            </section>
+            <section class="panel mini-card" id="library">
+              <div class="mini-head"><h3>📚 Doubt library</h3><a href="#community">Browse all</a></div>
+              <label class="library-search"><span class="search-icon" aria-hidden="true">⌕</span><input type="search" id="librarySearch" placeholder="Find an explanation..."></label>
+              <div class="library-list" id="libraryList"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="insight-grid" aria-label="Learning insights">
+        <section class="panel insight-panel" id="confusion-check">
+          <div class="eyebrow">A gentle check-in</div>
+          <h2 class="panel-title" style="font:500 23px Georgia,serif;margin:5px 0 6px">🧠 Find your hidden confusion</h2>
+          <p class="panel-subtitle">Choose what feels closest. There’s no score — just a next step that fits.</p>
+          <form class="insight-form" id="detectorForm">
+            <div><label for="detectorTopic">What topic are you working on?</label><input id="detectorTopic" type="text" maxlength="80" placeholder="e.g. fractions, photosynthesis" required></div>
+            <div><label for="confusionType">Where are you getting stuck?</label>
+              <select id="confusionType">
+                <option value="theory-problems">I understand the theory but can't solve problems.</option>
+                <option value="examples-independent">I understand examples but can't solve questions independently.</option>
+                <option value="beginning">I'm confused from the very beginning.</option>
+                <option value="explain">I understand it but can't explain it to others.</option>
+              </select>
+            </div>
+            <button class="primary small" type="submit">Find my next step ↗</button>
+          </form>
+          <div class="recommendation" id="recommendation" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="panel insight-panel" id="confusion-map">
+          <div class="eyebrow">For the class, before the lesson</div>
+          <h2 class="panel-title" style="font:500 23px Georgia,serif;margin:5px 0 6px">💚 Nobody asked, but everyone needed it</h2>
+          <p class="panel-subtitle">Anonymously name a tricky topic and how it feels. Similar topics are grouped below.</p>
+          <form class="insight-form" id="checkinForm">
+            <div><label for="checkinTopic">What topic should we revisit?</label><input id="checkinTopic" type="text" maxlength="80" placeholder="e.g. solving equations" required></div>
+            <div><label for="checkinLevel">How are you feeling about it?</label>
+              <select id="checkinLevel">
+                <option value="basics">Basic concepts — mostly understood</option>
+                <option value="applying">Applying concepts to problems — needs support</option>
+                <option value="independent">Solving independently — more practice needed</option>
+              </select>
+            </div>
+            <button class="primary small" type="submit">Add an anonymous check-in ↗</button>
+          </form>
+          <div class="recommendation visible" style="margin-top:12px"><strong>🌿 No names are collected.</strong>This demo stores check-ins only in this browser. A shared class map needs a connected classroom service.</div>
+          <div style="margin-top:16px">
+            <div class="mini-head"><h3>Class confusion map</h3><span id="mapResponseCount" class="feature-date"></span></div>
+            <div class="map-list" id="confusionMapList" aria-live="polite"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="questions-area" id="communityQuestions">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">We're learning together</div>
+            <h2>Questions from the community</h2>
+            <p>See a doubt that feels familiar? Let someone know they aren't alone.</p>
+          </div>
+          <div class="question-tools">
+            <select id="subjectFilter" aria-label="Filter questions by subject">
+              <option value="all">All subjects</option>
+              <option value="Maths">Maths</option>
+              <option value="Science">Science</option>
+              <option value="English">English</option>
+              <option value="Study tips">Study tips</option>
+            </select>
+          </div>
+        </div>
+        <div class="question-list" id="questionList"></div>
+      </section>
+    </main>
+    <footer><span><strong>AskWithoutFear</strong> · It's okay not to know. It's okay to ask.</span><span>A kinder way to learn, together. 🌱</span></footer>
+  </div>
+
+  <div class="modal-backdrop" id="buddyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <h2 id="modalTitle">Find your study buddy</h2>
+      <p>Tell us what you'd like help with. We'll show your request to classmates who are happy to lend a hand.</p>
+      <label for="buddyTopic" class="panel-subtitle">What topic are you working on?</label>
+      <input type="text" id="buddyTopic" maxlength="100" placeholder="e.g. fractions, photosynthesis...">
+      <div class="modal-actions"><button class="secondary" id="cancelBuddy">Maybe later</button><button class="primary small" id="submitBuddy">Find someone ↗</button></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const starterQuestions = [
+      {
+        id: "seed-1", subject: "Maths", author: "Anonymous",
+        title: "Why does a negative number times a negative become positive?",
+        body: "I can remember the rule, but I don't understand why it works. Could someone explain it simply?",
+        style: "Simple words · An analogy", answer: "Think of subtracting a debt: removing a debt of 3 is the same as gaining 3. So (−1) × (−3) = +3. The pattern also has to stay consistent: 3×(−3)=−9, 2×(−3)=−6, 1×(−3)=−3, 0×(−3)=0, so the next step is (−1)×(−3)=+3.",
+        support: 18, status: "Still Confused", saved: false, created: 0
+      },
+      {
+        id: "seed-2", subject: "Science", author: "Maya",
+        title: "How does a plant ‘eat’ if it doesn't have a mouth?",
+        body: "I know photosynthesis has something to do with sunlight, but how does that turn into food?",
+        style: "An example · Step by step", answer: "Leaves act a little like tiny kitchens. They take in sunlight, water from the roots, and carbon dioxide from the air. The plant uses that energy to make sugar (its food) and releases oxygen.",
+        support: 12, status: "Beginning to Understand", saved: true, created: 0
+      },
+      {
+        id: "seed-3", subject: "English", author: "Anonymous",
+        title: "What's the difference between 'their', 'there' and 'they're'?",
+        body: "They all sound the same when I read them. Is there an easy way to remember?",
+        style: "Simple words · An example", answer: "Try these clues: their shows belonging (“their book”); there points to a place (“over there”); they're is short for “they are” (“they're learning”). If you can swap in “they are,” use they're.",
+        support: 9, status: "Understood", saved: false, created: 0
+      },
+      {
+        id: "seed-4", subject: "Study tips", author: "Sam",
+        title: "How do you start studying when everything feels overwhelming?",
+        body: "I keep putting it off because I don't know where to start. Even a small tip would help.",
+        style: "Simple words · Step by step", answer: "Pick one tiny task that takes five minutes: open your notes, write three questions, or review one page. Starting small makes the next step feel less intimidating. A short break after is allowed, too.",
+        support: 21, status: "Beginning to Understand", saved: false, created: 0
+      }
+    ];
+    const librarySeeds = [
+      { title: "Why do negative numbers multiply into positives?", subject: "Maths", questionId: "seed-1" },
+      { title: "Photosynthesis, explained like a tiny kitchen", subject: "Science", questionId: "seed-2" },
+      { title: "Their, there, they're — an easy memory trick", subject: "English", questionId: "seed-3" }
+    ];
+    const storageKey = "askWithoutFear.questions.v1";
+    const preferencesKey = "askWithoutFear.preferences.v1";
+    const checkinsKey = "askWithoutFear.confusionCheckins.v1";
+    const checkinLevels = {
+      basics: { label: "Basic concepts · Mostly understood", nextStep: "Try a quick self-check: explain the key idea in one sentence, then compare it with your notes. If it still feels fuzzy, revisit one short overview." },
+      applying: { label: "Applying concepts · Needs support", nextStep: "Work through one solved example and pause at each step to say why it works. Then try a similar problem with your notes nearby." },
+      independent: { label: "Solving independently · More practice needed", nextStep: "Practise a few questions without looking at examples. Check each answer, notice the first step that felt uncertain, and ask about that specific step." }
+    };
+    const detectorRecommendations = {
+      "theory-problems": topic => `You have the big idea; the bridge to using it is the tricky part. For ${topic}, write down what the question gives you and what it asks for, then choose one worked example and identify why each step follows.`,
+      "examples-independent": topic => `You're learning from examples and are ready to practise the hand-off. For ${topic}, cover the solution to one familiar example, try the first step yourself, then uncover only the next step when you need a hint.`,
+      beginning: topic => `Starting at the beginning is a useful clue, not a failure. For ${topic}, find a short introduction and identify just one unfamiliar word or idea. Ask about that first small piece before moving on.`,
+      explain: topic => `Being able to follow an idea is a real start. To make ${topic} your own, explain it aloud in two sentences as if helping a friend, then use one example to fill any gaps you notice.`
+    };
+    let questions = loadQuestions();
+    let preferences = readStorage(preferencesKey, {});
+    let checkins = loadCheckins();
+    let selectedStyle = "simple";
+
+    function readStorage(key, fallback) {
+      try {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : fallback;
+      } catch (error) {
+        console.error("Could not read saved AskWithoutFear data:", error);
+        return fallback;
+      }
+    }
+    function loadQuestions() {
+      const saved = readStorage(storageKey, null);
+      return Array.isArray(saved) ? saved : starterQuestions.map(question => ({...question}));
+    }
+    function loadCheckins() {
+      const saved = readStorage(checkinsKey, []);
+      return Array.isArray(saved) ? saved.filter(item =>
+        item && typeof item.topic === "string" && checkinLevels[item.level]
+      ) : [];
+    }
+    function saveQuestions() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(questions));
+      } catch (error) {
+        console.error("Could not save AskWithoutFear questions:", error);
+        showToast("Your browser couldn't save this change.");
+      }
+    }
+    function savePreferences() {
+      try {
+        localStorage.setItem(preferencesKey, JSON.stringify(preferences));
+      } catch (error) {
+        console.error("Could not save AskWithoutFear preferences:", error);
+        showToast("Your browser couldn't save this change.");
+      }
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+    let toastTimer;
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+    function renderQuestions() {
+      const list = document.getElementById("questionList");
+      const filter = document.getElementById("subjectFilter").value;
+      const visible = questions.filter(question => filter === "all" || question.subject === filter)
+        .sort((a, b) => b.created - a.created);
+      if (!visible.length) {
+        list.innerHTML = '<div class="panel empty-state">No questions in this subject yet. You could be the first to ask. 🌱</div>';
+        return;
+      }
+      list.innerHTML = visible.map(question => `
+        <article class="panel question-card">
+          <div class="question-meta"><span class="subject-tag">${escapeHtml(question.subject)}</span><span>·</span><span>${escapeHtml(question.author)}</span><span>·</span><span>${question.created ? "Just now" : "From the community"}</span></div>
+          <h3>${escapeHtml(question.title)}</h3>
+          <p class="question-body">${escapeHtml(question.body)}</p>
+          ${question.answer ? `<div class="answer"><strong>🧠 A simple explanation</strong><br>${escapeHtml(question.answer)}</div>` : ""}
+          <div class="question-meta" style="margin-top:10px">Help requested: ${escapeHtml(question.style)}</div>
+          <div class="question-actions">
+            <button type="button" data-action="support" data-id="${escapeHtml(question.id)}" class="${question.supported ? "active" : ""}">♡ I've had this doubt too! ${Number(question.support) || 0}</button>
+            <button type="button" data-action="answer" data-id="${escapeHtml(question.id)}">💬 ${question.answer ? "Read explanation" : "Offer an explanation"}</button>
+            <select class="tracker-select" aria-label="Understanding status for ${escapeHtml(question.title)}" data-action="status" data-id="${escapeHtml(question.id)}">
+              ${["Still Confused", "Beginning to Understand", "Understood"].map(status => `<option ${question.status === status ? "selected" : ""}>${status}</option>`).join("")}
+            </select>
+            <button type="button" class="save-action ${question.saved ? "active" : ""}" data-action="save" data-id="${escapeHtml(question.id)}">${question.saved ? "🔖 Saved" : "＋ Save to library"}</button>
+          </div>
+        </article>`).join("");
+    }
+    function renderLibrary() {
+      const query = document.getElementById("librarySearch").value.trim().toLowerCase();
+      const savedQuestions = questions.filter(question => question.saved).map(question => ({
+        title: question.title, subject: question.subject, questionId: question.id
+      }));
+      const allItems = [...savedQuestions, ...librarySeeds.filter(seed => !savedQuestions.some(item => item.questionId === seed.questionId))];
+      const matches = allItems.filter(item => `${item.title} ${item.subject}`.toLowerCase().includes(query));
+      const libraryList = document.getElementById("libraryList");
+      libraryList.innerHTML = matches.length
+        ? matches.slice(0, 4).map(item => `<a class="library-item" href="#communityQuestions" data-library-id="${escapeHtml(item.questionId)}"><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.subject)} · ${questions.find(question => question.id === item.questionId)?.answer ? "With an explanation" : "Saved for revision"}</small></a>`).join("")
+        : '<div class="empty-state" style="padding:13px 5px">Nothing found yet. Try another search.</div>';
+    }
+    function renderConfusionMap() {
+      const groups = new Map();
+      checkins.forEach(checkin => {
+        const key = checkin.topic.trim().toLocaleLowerCase();
+        if (!groups.has(key)) groups.set(key, { topic: checkin.topic.trim(), levels: { basics: 0, applying: 0, independent: 0 } });
+        groups.get(key).levels[checkin.level] += 1;
+      });
+      const list = document.getElementById("confusionMapList");
+      const topics = [...groups.values()].sort((a, b) =>
+        (b.levels.applying + b.levels.independent) - (a.levels.applying + a.levels.independent)
+      );
+      document.getElementById("mapResponseCount").textContent =
+        `${checkins.length} ${checkins.length === 1 ? "check-in" : "check-ins"}`;
+      if (!topics.length) {
+        list.innerHTML = '<div class="map-empty">No check-ins yet. Add one to start a class map. 🌱</div>';
+        return;
+      }
+      list.innerHTML = topics.map(group => {
+        const count = Object.values(group.levels).reduce((sum, value) => sum + value, 0);
+        return `<article class="map-topic"><h4>${escapeHtml(group.topic)}</h4>${Object.entries(checkinLevels).map(([key, level]) =>
+          `<div class="map-row"><span>${escapeHtml(level.label)}</span><strong>${group.levels[key]}</strong><div class="map-bar"><span style="width:${count ? Math.round(group.levels[key] / count * 100) : 0}%"></span></div></div>`
+        ).join("")}</article>`;
+      }).join("");
+    }
+    document.getElementById("identitySelect").addEventListener("change", event => {
+      document.getElementById("displayName").hidden = event.target.value !== "named";
+    });
+    document.getElementById("questionForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const text = document.getElementById("questionText").value.trim();
+      if (!text) {
+        showToast("Write a little about what's confusing you first.");
+        document.getElementById("questionText").focus();
+        return;
+      }
+      const identity = document.getElementById("identitySelect").value;
+      const name = document.getElementById("displayName").value.trim();
+      if (identity === "named" && !name) {
+        showToast("Add the name you'd like classmates to see.");
+        document.getElementById("displayName").focus();
+        return;
+      }
+      const newQuestion = {
+        id: `q-${Date.now()}`, subject: inferSubject(text),
+        author: identity === "named" ? name : "Anonymous",
+        title: text.length > 120 ? `${text.slice(0, 117)}…` : text,
+        body: "A classmate has shared this doubt with the community. Let's help each other understand.",
+        style: [...document.querySelectorAll(".chip.selected")].map(chip => chip.textContent.trim().replace(/^[^ ]+ /, "")).join(" · ") || "Simple words",
+        answer: "", support: 0, status: "Still Confused", saved: false, created: Date.now()
+      };
+      questions.unshift(newQuestion);
+      saveQuestions();
+      event.target.reset();
+      document.getElementById("displayName").hidden = true;
+      renderQuestions();
+      renderLibrary();
+      showToast("Your question is shared. Thank you for asking! 🌱");
+      document.getElementById("communityQuestions").scrollIntoView({behavior: "smooth", block: "start"});
+    });
+    document.getElementById("detectorForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const topic = document.getElementById("detectorTopic").value.trim();
+      if (!topic) {
+        document.getElementById("detectorTopic").focus();
+        return;
+      }
+      const kind = document.getElementById("confusionType").value;
+      const recommendation = document.getElementById("recommendation");
+      recommendation.innerHTML = `<strong>Your next step for ${escapeHtml(topic)}</strong>${escapeHtml(detectorRecommendations[kind](topic))}`;
+      recommendation.classList.add("visible");
+    });
+    document.getElementById("checkinForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const topic = document.getElementById("checkinTopic").value.trim().replace(/\s+/g, " ");
+      if (!topic) {
+        document.getElementById("checkinTopic").focus();
+        return;
+      }
+      const level = document.getElementById("checkinLevel").value;
+      checkins.push({ topic, level });
+      try {
+        localStorage.setItem(checkinsKey, JSON.stringify(checkins));
+      } catch (error) {
+        console.error("Could not save confusion-map check-in:", error);
+        showToast("Your browser couldn't save this check-in.");
+        return;
+      }
+      event.target.reset();
+      renderConfusionMap();
+      showToast("Your anonymous check-in was added to the map. 💚");
+    });
+    function inferSubject(text) {
+      const lower = text.toLowerCase();
+      if (/math|number|equation|fraction|formula|algebra|geometry|calcul|percent/.test(lower)) return "Maths";
+      if (/science|plant|energy|force|cell|photosynth|atom|chemical|physics|biology/.test(lower)) return "Science";
+      if (/english|grammar|word|writing|read|their|there|they're|essay/.test(lower)) return "English";
+      return "Study tips";
+    }
+    document.querySelectorAll(".chip").forEach(chip => chip.addEventListener("click", () => {
+      chip.classList.toggle("selected");
+    }));
+    document.getElementById("questionList").addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const question = questions.find(item => item.id === button.dataset.id);
+      if (!question) return;
+      if (button.dataset.action === "support") {
+        question.supported = !question.supported;
+        question.support = Math.max(0, (Number(question.support) || 0) + (question.supported ? 1 : -1));
+        showToast(question.supported ? "You reminded someone they're not alone. 💚" : "Support removed.");
+      } else if (button.dataset.action === "save") {
+        question.saved = !question.saved;
+        showToast(question.saved ? "Saved to your Doubt Library. 📚" : "Removed from your Doubt Library.");
+      } else if (button.dataset.action === "answer") {
+        if (question.answer) {
+          showToast("The explanation is just above the question.");
+          return;
+        }
+        const card = button.closest(".question-card");
+        const form = document.createElement("form");
+        form.className = "answer-form";
+        form.dataset.questionId = question.id;
+        form.innerHTML = '<label class="panel-subtitle">Share a kind, simple explanation</label><textarea name="answer" maxlength="800" required placeholder="Try explaining it in your own words..."></textarea><div class="answer-form-actions"><button type="button" class="secondary" data-action="cancel-answer">Cancel</button><button type="submit" class="primary small">Share explanation</button></div>';
+        card.querySelector(".question-actions").before(form);
+        form.querySelector("textarea").focus();
+        return;
+      }
+      saveQuestions();
+      renderQuestions();
+      renderLibrary();
+    });
+    document.getElementById("questionList").addEventListener("click", event => {
+      const cancel = event.target.closest('[data-action="cancel-answer"]');
+      if (cancel) cancel.closest(".answer-form").remove();
+    });
+    document.getElementById("questionList").addEventListener("submit", event => {
+      const form = event.target.closest(".answer-form");
+      if (!form) return;
+      event.preventDefault();
+      const answer = new FormData(form).get("answer").toString().trim();
+      if (!answer) return;
+      const question = questions.find(item => item.id === form.dataset.questionId);
+      if (!question) return;
+      question.answer = answer;
+      saveQuestions();
+      renderQuestions();
+      showToast("Your explanation has been shared. Thanks for helping! 💚");
+    });
+    document.getElementById("questionList").addEventListener("change", event => {
+      if (event.target.dataset.action !== "status") return;
+      const question = questions.find(item => item.id === event.target.dataset.id);
+      if (!question) return;
+      question.status = event.target.value;
+      saveQuestions();
+      showToast(`Your progress is now “${question.status}”.`);
+    });
+    document.getElementById("featuredSupport").addEventListener("click", event => {
+      const current = Number(preferences.featuredSupport) || 24;
+      const alreadySupported = Boolean(preferences.featuredSupported);
+      preferences.featuredSupported = !alreadySupported;
+      preferences.featuredSupport = Math.max(0, current + (alreadySupported ? -1 : 1));
+      document.getElementById("featuredCount").textContent = preferences.featuredSupport;
+      event.currentTarget.classList.toggle("active", preferences.featuredSupported);
+      event.currentTarget.firstChild.textContent = preferences.featuredSupported ? "♥ I've had this doubt too! " : "♡ I've had this doubt too! ";
+      savePreferences();
+    });
+    document.getElementById("featuredCount").textContent = Number(preferences.featuredSupport) || 24;
+    if (preferences.featuredSupported) {
+      document.getElementById("featuredSupport").classList.add("active");
+      document.getElementById("featuredSupport").firstChild.textContent = "♥ I've had this doubt too! ";
+    }
+    document.getElementById("subjectFilter").addEventListener("change", renderQuestions);
+    document.getElementById("librarySearch").addEventListener("input", renderLibrary);
+    document.getElementById("libraryList").addEventListener("click", event => {
+      const link = event.target.closest("[data-library-id]");
+      if (!link) return;
+      const questionCard = [...document.querySelectorAll(".question-card")].find(card =>
+        card.querySelector(`[data-id="${CSS.escape(link.dataset.libraryId)}"]`));
+      if (questionCard) setTimeout(() => questionCard.scrollIntoView({behavior: "smooth", block: "center"}), 50);
+    });
+    const buddyModal = document.getElementById("buddyModal");
+    document.getElementById("buddyButton").addEventListener("click", () => {
+      buddyModal.classList.add("open");
+      document.getElementById("buddyTopic").focus();
+    });
+    document.getElementById("cancelBuddy").addEventListener("click", () => buddyModal.classList.remove("open"));
+    document.getElementById("buddyLearnMore").addEventListener("click", event => {
+      event.preventDefault();
+      showToast("Choose a topic and we'll share a friendly study-buddy request with your classmates.");
+    });
+    document.getElementById("submitBuddy").addEventListener("click", () => {
+      const topic = document.getElementById("buddyTopic").value.trim();
+      if (!topic) {
+        showToast("Add a topic so we can find the right study buddy.");
+        document.getElementById("buddyTopic").focus();
+        return;
+      }
+      buddyModal.classList.remove("open");
+      document.getElementById("buddyTopic").value = "";
+      showToast(`Study-buddy request for ${topic} noted. 🤝`);
+    });
+    buddyModal.addEventListener("click", event => {
+      if (event.target === buddyModal) buddyModal.classList.remove("open");
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") buddyModal.classList.remove("open");
+    });
+    renderQuestions();
+    renderLibrary();
+    renderConfusionMap();
+  </script>
+</body>
+</html>
